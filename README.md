@@ -52,6 +52,11 @@ export GEMINI_API_KEY=your_api_key_here
 2. APIキーを生成
 3. 環境変数に設定
 
+### 実行形式のダウンロード
+- 実行形式は本リポジトリのリリースとしてアップロードされています。
+- Windows用、Mac用、それぞれ適切なものをダウンロードしてください。
+- https://github.com/hortense667/GazoSagasu/releases/tag/GazoSagazu
+
 ## 🚀 使用方法
 
 ### 基本的な使用方法
