@@ -64,6 +64,7 @@ export GEMINI_API_KEY=your_api_key_here
 #### 画像の埋め込み生成
 - プログラム実行フォルダーより下のフォルダー内にある画像ファイルを処理対象とします。
 - Windows版は「LocalAIImageSearch」、Mac版は「LocalAIImageSearch_Mac」です。Mac版は、それに準じて読み替えてください。
+- Dropboxなどを使用している場合は、画像ファイルや関係するjsonファイル（local_image_embeddings.json、およびgemini_daily_usage.json）は、オフラインで実態が存在することが条件となります。
 
 ```bash
 # 通常モード（1日1000件のAPI無料枠内＝1万枚弱の処理が可能）
