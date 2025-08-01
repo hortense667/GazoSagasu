@@ -1,8 +1,6 @@
 # 画像さがす君（ローカルAI画像検索システム）
 - (c)2025 / Satoshi Endo @hortense667
 
-This is a tool that uses Gemini to search for image files in the HDD using words.
-
 **Gemini + ローカル処理版**
 
 > Gemini 2.5 Flash-Liteを使用した超高速な画像キャプション生成と、ローカルでのベクトル処理を組み合わせた画像検索システムです。
@@ -125,7 +123,7 @@ local-ai-image-search/
 **Satoshi Endo @hortense667**
 
 - GitHub: [@hortense667](https://github.com/hortense667)
-- X: [@hortense667](https://twitter.com/hortense667)
+- X: [@hortense667](https://x.com/hortense667)
 
 ## 🙏 謝辞
 
