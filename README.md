@@ -65,6 +65,7 @@ export GEMINI_API_KEY=your_api_key_here
 - プログラム実行フォルダーより下のフォルダー内にある画像ファイルを処理対象とします。
 - Windows版は「LocalAIImageSearch」、Mac版は「LocalAIImageSearch_Mac」です。Mac版は、それに準じて読み替えてください。
 - Dropboxなどを使用している場合は、画像ファイルや関係するjsonファイル（local_image_embeddings.json、およびgemini_daily_usage.json）は、オフラインで実態が存在することが条件となります。
+- Mac版の場合はセキュリティの関係でローカルWebサーバーを立てて検索結果のオリジナル画像を表示しています。スクリプトはその間動作しているので終了したい場合はCtrl-Cを押してください。
 
 ```bash
 # 通常モード（1日1000件のAPI無料枠内＝1万枚弱の処理が可能）
@@ -78,6 +79,10 @@ LocalAIImageSearch generate 0
 ```
 
 #### 画像検索
+- 画像の埋め込み生成と同じく、プログラム実行フォルダーより下のフォルダー内にある画像ファイルを処理対象とします。
+- Windows版は「LocalAIImageSearch」、Mac版は「LocalAIImageSearch_Mac」です。Mac版は、それに準じて読み替えてください。
+- 結果はWeb画面を開いてサムネイルの形で表示されます。
+- サムネイルかファイル名をクリックするとそのファイルが拡大表示されるので必要に応じてダウンロードなど行うことができます。
 ```bash
 # 基本的な検索
 LocalAIImageSearch search "カツカレー"
@@ -148,3 +153,4 @@ local-ai-image-search/
 **画像さがす君** - あなたの画像を賢く検索するAIアシスタント
 
 *Made with ❤️ by Satoshi Endo* 
+
