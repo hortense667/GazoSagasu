@@ -35,7 +35,7 @@
 - 1GB以上の空き容量
 
 ### 推奨要件
-- **Windows**: Ryzen AI 9 PRO搭載PC（非搭載でも納得できる高速性です）
+- **Windows**: Windows 11
 - **Mac**: M1/M2搭載Mac
 
 ### 環境変数の設定
@@ -64,7 +64,7 @@ export GEMINI_API_KEY=your_api_key_here
 #### 画像の埋め込み生成
 - プログラム実行フォルダーより下のフォルダー内にある画像ファイルを処理対象とします。
 - Windows版は「LocalAIImageSearch」、Mac版は「LocalAIImageSearch_Mac」です。Mac版は、それに準じて読み替えてください。
-- Dropboxなどを使用している場合は、画像ファイルや関係するjsonファイル（local_image_embeddings.json、およびgemini_daily_usage.json）は、オフラインで実態が存在することが条件となります。
+- Dropboxなどを使用している場合は、画像ファイルや関係するjsonファイル（local_image_embeddings.json、およびgemini_daily_usage.json）は、オフラインで実態が存在することが条件となります。jsonファイルの競合にもご注意ください。
 - Mac版の場合はセキュリティの関係でローカルWebサーバーを立てて検索結果のオリジナル画像を表示しています。スクリプトはその間動作しているので終了したい場合はCtrl-Cを押してください。
 
 ```bash
@@ -153,4 +153,5 @@ local-ai-image-search/
 **画像さがす君** - あなたの画像を賢く検索するAIアシスタント
 
 *Made with ❤️ by Satoshi Endo* 
+
 
