@@ -13,10 +13,10 @@
 
 ### GUIランチャーの使い方 (Windows / Mac)
 
-1.  配布されたzipファイルを解凍します。
+1.  配布されたzipファイルを解凍します（GitHubのReleaseよりGazoSagasu10.zip、GazoSafasu_Mac10など）。
 2.  中にあるGUIランチャーを起動します。
-    *   **Windowsの場合**: `gui_launcher.exe` をダブルクリックします。
-    *   **Macの場合**: `gui_launcher.app` を「アプリケーション」フォルダにコピーし、そこからダブルクリックして起動します。
+    *   **Windowsの場合**: `gazosk.exe` をダブルクリックします。
+    *   **Macの場合**: `Gazosk_Mac` を「アプリケーション」フォルダにコピーし、そこからダブルクリックして起動します。
 3.  **Generateタブ**:
     *   「処理対象パス」に、画像がたくさん入っているフォルダを指定します。
     *   「生成 開始」ボタンを押すと、画像の特徴分析（埋め込み生成）が始まります。ログが表示され、進捗を確認できます。
@@ -145,7 +145,7 @@ LocalAIImageSearch stats
 
 ### ソースコード・開発者向けファイル
 *   `local_image_super_search2.py`: 本体プログラムのPythonスクリプトです。
-*   `gui_launcher.py`: GUIランチャーのPythonスクリプトです。
+*   `Gazosk.py`: GUIランチャーのPythonスクリプトです。
 *   `gazosk.ico` / `gazosk.icns`: アプリケーションのアイコンファイルです。
 *   `requirements.txt`: 開発に必要なライブラリの一覧です。
 *   `*.spec`: PyInstallerで実行ファイルを作成するための設定ファイルです。
@@ -176,3 +176,4 @@ LocalAIImageSearch stats
 **画像さがす君** - あなたの画像を賢く検索するAIアシスタント
 
 *Made with ❤️ by Satoshi Endo* 
+
