@@ -148,7 +148,6 @@ LocalAIImageSearch stats
 *   `Gazosk.py`: GUIランチャーのPythonスクリプトです。
 *   `gazosk.ico` / `gazosk.icns`: アプリケーションのアイコンファイルです。
 *   `requirements.txt`: 開発に必要なライブラリの一覧です。
-*   `*.spec`: PyInstallerで実行ファイルを作成するための設定ファイルです。
 *   `clip_image_encoder_export.py`: `clip_image_encoder.onnx`を生成するためのスクリプトです。
 *   `migrate_add_creation_date.py`: データ移行ツールのPythonスクリプトです。
 
@@ -176,4 +175,5 @@ LocalAIImageSearch stats
 **画像さがす君** - あなたの画像を賢く検索するAIアシスタント
 
 *Made with ❤️ by Satoshi Endo* 
+
 
