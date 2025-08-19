@@ -1,4 +1,4 @@
-# 画像さがす君（ローカルAI画像検索システム） ver.1.0.0
+# 画像さがす君（ローカルAI画像検索システム） ver.1.0.1
 - (c)2025 / Satoshi Endo @hortense667
 
 **Gemini + ローカル処理版**
@@ -13,10 +13,12 @@
 
 ### GUIランチャーの使い方 (Windows / Mac)
 
-1.  配布されたzipファイルを解凍します（GitHubのReleaseよりGazoSagasu10.zip、GazoSafasu_Mac10など）。
+**⚠️ 重要**: GUIアプリケーションを使用する前に、必ず環境変数`GEMINI_API_KEY`を設定してください。設定方法は下記の「環境変数の設定」セクションを参照してください。
+
+1.  配布されたzipファイルを解凍します。
 2.  中にあるGUIランチャーを起動します。
-    *   **Windowsの場合**: `gazosk.exe` をダブルクリックします。
-    *   **Macの場合**: `Gazosk_Mac` を「アプリケーション」フォルダにコピーし、そこからダブルクリックして起動します。
+    *   **Windowsの場合**: `Gazosk.exe` をダブルクリックします。
+    *   **Macの場合**: `Gazosk` を「アプリケーション」フォルダにコピーし、そこからダブルクリックして起動します。
 3.  **Generateタブ**:
     *   「処理対象パス」に、画像がたくさん入っているフォルダを指定します。
     *   「生成 開始」ボタンを押すと、画像の特徴分析（埋め込み生成）が始まります。ログが表示され、進捗を確認できます。
@@ -24,6 +26,11 @@
     *   「処理対象パス」が正しいことを確認します。
     *   「クエリ」に探したい言葉（例：`青い空と白い雲`）を入力し、「検索 実行」ボタンを押します。
     *   検索が完了すると、自動的にWebブラウザが開き、結果がサムネイルで表示されます。
+
+**トラブルシューティング**:
+- GUIアプリケーションで「APIキーが設定されていません」というエラーが表示される場合は、環境変数の設定を確認してください。
+- Macの場合、LaunchAgentsを使用した設定方法が最も確実です。
+- 設定後は、GUIアプリケーションを再起動してください。
 
 ---
 
@@ -54,24 +61,114 @@
 - インターネット接続（画像処理時＝Gemini API）
 - 最低4GB RAM
 - 1GB以上の空き容量
+- **Gemini APIキー**: 環境変数`GEMINI_API_KEY`として設定が必要
 
 ### 推奨要件
 - **Windows**: Ryzen AI 9 PRO搭載PC（非搭載でも納得できる高速性です）
 - **Mac**: M1/M2搭載Mac
 
 ### 環境変数の設定
+
+#### Macでの設定方法
+
+**方法1: ターミナルで一時的に設定（推奨）**
 ```bash
-# Windows
+# ターミナルを開いて以下を実行
+export GEMINI_API_KEY=your_api_key_here
+
+# 設定を確認
+echo $GEMINI_API_KEY
+```
+
+**方法2: 永続的に設定**
+```bash
+# ~/.zshrcファイルに追加（zshを使用している場合）
+echo 'export GEMINI_API_KEY=your_api_key_here' >> ~/.zshrc
+source ~/.zshrc
+
+# または ~/.bash_profileファイルに追加（bashを使用している場合）
+echo 'export GEMINI_API_KEY=your_api_key_here' >> ~/.bash_profile
+source ~/.bash_profile
+```
+
+**方法3: GUIアプリケーション用の設定**
+MacのGUIアプリケーション（Gazosk_Mac）が環境変数を認識するようにするには、以下のいずれかの方法を使用してください：
+
+1. **LaunchAgentsを使用する方法（推奨）**:
+   ```bash
+   # LaunchAgentsディレクトリを作成
+   mkdir -p ~/Library/LaunchAgents
+   
+   # plistファイルを作成
+   cat > ~/Library/LaunchAgents/com.user.geminiapi.plist << EOF
+   <?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+   <plist version="1.0">
+   <dict>
+       <key>Label</key>
+       <string>com.user.geminiapi</string>
+       <key>ProgramArguments</key>
+       <array>
+           <string>/bin/launchctl</string>
+           <string>setenv</string>
+           <string>GEMINI_API_KEY</string>
+           <string>your_api_key_here</string>
+       </array>
+       <key>RunAtLoad</key>
+       <true/>
+   </dict>
+   </plist>
+   EOF
+   
+   # LaunchAgentを読み込み
+   launchctl load ~/Library/LaunchAgents/com.user.geminiapi.plist
+   ```
+
+2. **アプリケーションをターミナルから起動する方法**:
+   ```bash
+   # 環境変数を設定してからアプリケーションを起動
+   export GEMINI_API_KEY=your_api_key_here
+   open /Applications/Gazosk.app
+   ```
+
+#### Windowsでの設定方法
+```cmd
+# コマンドプロンプトで一時的に設定
 set GEMINI_API_KEY=your_api_key_here
 
-# Mac/Linux
+# 永続的に設定（システム環境変数）
+setx GEMINI_API_KEY "your_api_key_here"
+```
+
+#### Linuxでの設定方法
+```bash
+# 一時的に設定
 export GEMINI_API_KEY=your_api_key_here
+
+# 永続的に設定
+echo 'export GEMINI_API_KEY=your_api_key_here' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ### Gemini APIキーの取得
 1. [Google AI Studio](https://aistudio.google.com/)にアクセス
-2. APIキーを生成
-3. 環境変数に設定
+2. アカウントにログイン（Googleアカウントが必要）
+3. 「Get API key」をクリック
+4. 「Create API key」を選択
+5. 生成されたAPIキーをコピー
+6. 上記の方法で環境変数に設定
+
+### 環境変数設定の確認
+設定が正しく行われているか確認するには：
+```bash
+# Mac/Linux
+echo $GEMINI_API_KEY
+
+# Windows
+echo %GEMINI_API_KEY%
+```
+
+**注意**: GUIアプリケーション（Gazosk_Mac）を使用する場合は、アプリケーションを再起動する必要があります。
 
 ## 🔧 コマンドラインでの使用方法（上級者向け）
 GUIランチャーを使わずに、従来通りコマンドラインから直接操作することも可能です。バッチ処理などを組みたい場合に便利です。
@@ -105,7 +202,7 @@ LocalAIImageSearch search -n 50 -t 2023 "カツカレー"
 ```
 *   **オプション (順不同)**
     *   `-noword`: テキストマッチを行わない
-    *   `-noexword`: キーワードを分解せず、指定した言葉通りに検索（固有名詞などに有効）同時に「(?<!エス)カレー」など正規表現が指定可
+    *   `-noexword`: キーワードを分解せず、指定した言葉通りに検索（固有名詞などに有効）
     *   `-nocos`: コサイン類似度評価を行わない
     *   `-n <件数>`: 結果の件数を指定 (例: -n 50, 0で無制限)
     *   `-t <時間|時間範囲>`: 画像の作成日でフィルタ (例: -t 2023, -t 202301, -t 20230115, -t 2020-2024, -t 202301-202303)
@@ -148,6 +245,7 @@ LocalAIImageSearch stats
 *   `Gazosk.py`: GUIランチャーのPythonスクリプトです。
 *   `gazosk.ico` / `gazosk.icns`: アプリケーションのアイコンファイルです。
 *   `requirements.txt`: 開発に必要なライブラリの一覧です。
+*   `*.spec`: PyInstallerで実行ファイルを作成するための設定ファイルです。
 *   `clip_image_encoder_export.py`: `clip_image_encoder.onnx`を生成するためのスクリプトです。
 *   `migrate_add_creation_date.py`: データ移行ツールのPythonスクリプトです。
 
@@ -175,6 +273,3 @@ LocalAIImageSearch stats
 **画像さがす君** - あなたの画像を賢く検索するAIアシスタント
 
 *Made with ❤️ by Satoshi Endo* 
-
-
-
