@@ -128,7 +128,7 @@ class App(ctk.CTk):
         ctk.CTkCheckBox(options_frame, text="テキストマッチを行わない (-noword)", variable=self.no_word_var).pack(anchor="w", padx=10, pady=5)
 
         self.no_exword_var = ctk.BooleanVar()
-        ctk.CTkCheckBox(options_frame, text="キーワードを分解しない (-noexword)", variable=self.no_exword_var).pack(anchor="w", padx=10, pady=5)
+        ctk.CTkCheckBox(options_frame, text="検索語を分解しない：「(?<!エス)カレー」など正規表現が指定可能 (-noexword)", variable=self.no_exword_var).pack(anchor="w", padx=10, pady=5)
 
         self.no_cos_var = ctk.BooleanVar()
         ctk.CTkCheckBox(options_frame, text="コサイン類似度評価を行わない (-nocos)", variable=self.no_cos_var).pack(anchor="w", padx=10, pady=5)

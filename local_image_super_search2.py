@@ -1075,8 +1075,9 @@ class LocalAIImageSearcher:
                 score += 5  # 部分一致は中スコア
         return score
 
-    def _hybrid_search(self, embeddings_data, original_query, expanded_queries, top_k, no_word=False, no_cos=False):
+    def _hybrid_search(self, embeddings_data, original_query, expanded_queries, top_k, no_word=False, no_cos=False, no_ex_word=False):
         """ハイブリッド検索（テキストマッチング + 埋め込み類似度）"""
+        import re
         results = []
         
         if no_word and no_cos:
@@ -1085,21 +1086,32 @@ class LocalAIImageSearcher:
 
         text_matches = []
         if not no_word:
-            # 1. テキストマッチング（完全一致・部分一致）
+            # 1. テキストマッチング
             for image_file, data in embeddings_data.items():
                 description = data['description'].lower()
                 score = 0
                 
-                # 完全一致の重み付け
-                for query in expanded_queries:
-                    query_lower = query.lower()
-                    if query_lower in description:
-                        score += 10  # 完全一致は高スコア
-                    elif any(word in description for word in query_lower.split()):
-                        score += 5   # 部分一致は中スコア
-                
-                # 追加: より柔軟なマッチング
-                score += self._calculate_flexible_match_score(description, expanded_queries)
+                if no_ex_word:
+                    # -noexword の場合は正規表現でマッチング
+                    try:
+                        if re.search(original_query, description, re.IGNORECASE):
+                            score += 10  # マッチしたらスコアを加算
+                    except re.error as e:
+                        print(f"正規表現エラー: {e} - 通常の検索にフォールバックします。")
+                        # 正規表現エラーの場合は、通常の文字列として検索
+                        if original_query.lower() in description:
+                            score += 10
+                else:
+                    # 通常のキーワードマッチング
+                    for query in expanded_queries:
+                        query_lower = query.lower()
+                        if query_lower in description:
+                            score += 10  # 完全一致は高スコア
+                        elif any(word in description for word in query_lower.split()):
+                            score += 5   # 部分一致は中スコア
+                    
+                    # 追加: より柔軟なマッチング
+                    score += self._calculate_flexible_match_score(description, expanded_queries)
                 
                 if score > 0:
                     text_matches.append({
@@ -1254,12 +1266,12 @@ class LocalAIImageSearcher:
         
         if no_ex_word:
             expanded_queries = [query]
-            print("拡張クエリは無効です。")
+            print("拡張クエリは無効です（正規表現モード）。")
         else:
             expanded_queries = self._expand_search_query(query)
             print(f"拡張クエリ: {expanded_queries}")
 
-        search_results = self._hybrid_search(embeddings_data, query, expanded_queries, top_k, no_word, no_cos)
+        search_results = self._hybrid_search(embeddings_data, query, expanded_queries, top_k, no_word, no_cos, no_ex_word=no_ex_word)
         
         if not search_results:
             print("検索結果が見つかりませんでした。")
