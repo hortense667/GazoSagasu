@@ -39,6 +39,7 @@ os.environ['MKL_NUM_THREADS'] = '1'
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 os.environ['VECLIB_MAXIMUM_THREADS'] = '1'
 os.environ['NUMEXPR_NUM_THREADS'] = '1'
+os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 # NumPy設定（MKL回避）
 try:
@@ -1293,7 +1294,7 @@ class LocalAIImageSearcher:
     def _generate_html_content(self, results, query, base_url=""):
         html_safe_query = html.escape(query)
         html_content_parts = [
-            '<html><head><meta charset="utf-8"><title>ハイブリッド検索結果</title></head><body>',
+            '<html><head><meta charset="utf-8"><title>ハイブリッド検索結果</title><link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="></head><body>',
             f'<h2>ハイブリッド検索結果: Top {len(results)} 件</h2>',
             f'<p><strong>検索クエリ:</strong> {html_safe_query}</p>',
             '<div style="display:flex; flex-wrap:wrap;">'
