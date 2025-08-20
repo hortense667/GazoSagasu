@@ -16,7 +16,9 @@ Gemini 2.5 Flash-Liteを使用した超高速な画像キャプション生成�
 import os
 import glob
 import json
+import html
 import base64
+import pathlib
 from datetime import datetime, time
 from PIL import Image, ExifTags
 import warnings
@@ -1289,10 +1291,11 @@ class LocalAIImageSearcher:
             self._generate_and_open_html(top_results, query)
 
     def _generate_html_content(self, results, query, base_url=""):
-        html = [
+        html_safe_query = html.escape(query)
+        html_parts = [
             '<html><head><meta charset="utf-8"><title>ハイブリッド検索結果</title></head><body>',
             f'<h2>ハイブリッド検索結果: Top {len(results)} 件</h2>',
-            f'<p><strong>検索クエリ:</strong> {query}</p>',
+            f'<p><strong>検索クエリ:</strong> {html_safe_query}</p>',
             '<div style="display:flex; flex-wrap:wrap;">'
         ]
         
@@ -1345,7 +1348,7 @@ class LocalAIImageSearcher:
             except Exception as e:
                 img_tag = f'<div style="width:300px; height:200px; background:#ccc; display:flex; align-items:center; justify-content:center;">画像表示エラー: {e}</div>'
             
-            html.append(f'''
+            html_parts.append(f'''
             <div style="margin:10px; text-align:center; width:350px; border:1px solid #ddd; padding:10px; border-radius:5px;">
                 {img_tag}
                 <div style="font-size:12px; font-weight:bold; cursor:pointer;" onclick="{onclick_action}" title="クリックでオリジナル画像を新しいタブで開く">{i}. {result["file"]}</div>
@@ -1358,8 +1361,8 @@ class LocalAIImageSearcher:
                 <div style="font-size:12px; word-break:break-all; margin-top:5px;">{result["description"][:80]}...</div>
             </div>
             ''')
-        html.append('</div></body></html>')
-        return '\n'.join(html)
+        html_parts.append('</div></body></html>')
+        return '\n'.join(html_parts)
 
     def _generate_and_open_html(self, results, query):
         import tempfile
@@ -1370,7 +1373,7 @@ class LocalAIImageSearcher:
             f.write(html_str)
             temp_html_path = f.name
         print(f"\nハイブリッド検索結果をサムネイルで表示します: {temp_html_path}")
-        webbrowser.open(f'file://{temp_html_path}')
+        webbrowser.open(pathlib.Path(temp_html_path).as_uri())
 
     def _serve_html_on_mac(self, results, query):
         import http.server

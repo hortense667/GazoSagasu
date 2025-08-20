@@ -9,12 +9,24 @@ import platform
 import locale
 import sys
 
+# --- Get Application Path ---
+if getattr(sys, 'frozen', False):
+    # PyInstaller bundle
+    application_path = os.path.dirname(sys.executable)
+else:
+    # Development mode (running as .py)
+    application_path = os.path.dirname(os.path.abspath(__file__))
+
+
 APP_NAME = "画像さがす君・Local AI Image Search"
 APP_VERSION = "1.0.1"
 CONFIG_FILE = "gui_config.ini"
 README_FILE = "README.md"
 # 実行ファイル名はOSによって変える想定
-EXECUTABLE_NAME = "LocalAIImageSearch.exe" if platform.system() == "Windows" else "LocalAIImageSearch_Mac"
+EXECUTABLE_NAME = "LocalAIImageSearch.exe" if platform.system() == "Windows" else "LocalAIImageSearch"
+EXECUTABLE_PATH = os.path.join(application_path, EXECUTABLE_NAME)
+SCRIPT_NAME = "local_image_super_search2.py"
+SCRIPT_PATH = os.path.join(application_path, SCRIPT_NAME)
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -233,14 +245,15 @@ class App(ctk.CTk):
         self.generate_output_text.insert("end", f"対象パス: {path}\n")
 
         # コマンドを構築
-        command = [
-            "python", "-u", "local_image_super_search2.py", "generate"
-        ]
-        
-        # 実行ファイルがある場合はそちらを優先
-        executable_path = resource_path(EXECUTABLE_NAME)
-        if os.path.exists(executable_path):
-             command = [executable_path, "generate"]
+        # 開発中は.pyを直接実行し、配布後は.exeを実行する
+        if os.path.exists(EXECUTABLE_PATH):
+            command = [EXECUTABLE_PATH, "generate"]
+        elif os.path.exists(SCRIPT_PATH):
+            command = ["python", "-u", SCRIPT_PATH, "generate"]
+        else:
+            messagebox.showerror("エラー", f"実行対象が見つかりません:\n{EXECUTABLE_NAME}\n{SCRIPT_NAME}")
+            self.stop_generation(user_stopped=False)
+            return
 
         generate_count = self.generate_count_entry.get()
         if generate_count.isdigit():
@@ -315,14 +328,15 @@ class App(ctk.CTk):
         self.search_output_text.insert("end", f"対象パス: {path}\n")
 
         # コマンドを構築
-        command = [
-            "python", "-u", "local_image_super_search2.py", "search", query
-        ]
-        
-        # 実行ファイルがある場合はそちらを優先
-        executable_path = resource_path(EXECUTABLE_NAME)
-        if os.path.exists(executable_path):
-             command = [executable_path, "search", query]
+        # 開発中は.pyを直接実行し、配布後は.exeを実行する
+        if os.path.exists(EXECUTABLE_PATH):
+            command = [EXECUTABLE_PATH, "search", query]
+        elif os.path.exists(SCRIPT_PATH):
+            command = ["python", "-u", SCRIPT_PATH, "search", query]
+        else:
+            messagebox.showerror("エラー", f"実行対象が見つかりません:\n{EXECUTABLE_NAME}\n{SCRIPT_NAME}")
+            self.stop_search(user_stopped=False)
+            return
 
         # オプションを追加
         if self.no_word_var.get():
